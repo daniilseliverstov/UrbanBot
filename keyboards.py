@@ -1,12 +1,9 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram import types
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
-def get_main_menu_keyboard():
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [
-                InlineKeyboardButton(text="Получить контакты", callback_data="get_contacts")
-            ]
-        ]
-    )
-    return keyboard
+def get_contacts_keyboard():
+    keyboard = InlineKeyboardBuilder()
+    keyboard.add(types.InlineKeyboardButton(text="Показать контакты", callback_data="show_contacts"))
+    return keyboard.as_markup()
+

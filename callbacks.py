@@ -1,28 +1,13 @@
-from aiogram import Router, F
-from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery
+from aiogram import Dispatcher, types, Bot
 
-router = Router(name="callbacks")
 
-@router.callback_query(F.text == "get_contacts")
-async def get_contacts_callback(callback: CallbackQuery, state: FSMContext):
-    print("Кнопка нажата")  # Лог для отладки
-    contacts_data = router.contacts_data
-    text = "<b>Контакты для подачи заявлений:</b>\n\n"
+def register_callbacks(dp: Dispatcher, bot: Bot, contacts_data):
 
-    for organization, data in contacts_data.items():
-        text += f"<b>{organization}:</b>\n"
-        text += f"Официальный сайт: {data['Официальный сайт']}\n"
-
-        if "Телефон" in data:
-            text += f"Телефон: {data['Телефон']}\n"
-
-        if "Email" in data:
-            text += f"Email: {data['Email']}\n"
-
-        if "Страница заявления" in data:
-            text += f"Ссылка для подачи заявления: {data['Страница заявления']}\n"
-
-        text += "\n"
-
-    await callback.message.edit_text(text)
+    @dp.callback_query(lambda c: c.data == 'show_contacts')
+    async def show_contacts(callback_query: types.CallbackQuery):
+        response = "<b>Контакты:</b>\n"
+        for org, data in contacts_data.items():
+            response += f"\n<b>{org}:</b>\n"
+            for key, value in data.items():
+                response += f"  - {key}: {value}\n"
+        await bot.send_message(callback_query.from_user.id, response, parse_mode="HTML")

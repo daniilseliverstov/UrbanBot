@@ -1,16 +1,14 @@
-from aiogram import Router, F
-from aiogram.enums import ChatType
-from aiogram.fsm.context import FSMContext
-from aiogram.types import Message
-from keyboards import get_main_menu_keyboard
-
-router = Router(name="handlers")
+from aiogram import Dispatcher, types
+from aiogram.filters import CommandStart
+from keyboards import get_contacts_keyboard
 
 
-@router.message(F.chat.type == ChatType.PRIVATE, F.text == "/start")
-async def cmd_start(message: Message, state: FSMContext):
-    keyboard = get_main_menu_keyboard()
-    await message.answer(
-        "Привет! Я помогу тебе отправить заявление о неубранном мусоре.\n\nНажми на кнопку ниже, чтобы получить список контактов:",
-        reply_markup=keyboard
-    )
+def register_handlers(dp: Dispatcher, contacts_data):
+    @dp.message(CommandStart())
+    async def start_command(message: types.Message):
+        keyboard = get_contacts_keyboard()
+        await message.answer("Привет! Нажми кнопку, чтобы посмотреть контакты:", reply_markup=keyboard)
+
+
+
+
