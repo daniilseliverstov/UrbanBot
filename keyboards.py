@@ -1,19 +1,24 @@
-from aiogram import types
-from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 def get_main_keyboard():
-    keyboard = InlineKeyboardBuilder()
-    keyboard.add(types.InlineKeyboardButton(text="Мусор", callback_data="category_waste"))
-    keyboard.add(types.InlineKeyboardButton(text="Транспорт", callback_data="category_transport"))
-    keyboard.add(types.InlineKeyboardButton(text="Дороги", callback_data="category_roads"))
-    keyboard.add(types.InlineKeyboardButton(text="Роспотребнадзор", callback_data="category_rpn"))
-    return keyboard.as_markup()
+    # Создаем клавиатуру с двумя строками по две кнопки
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="Мусор", callback_data="category_waste"),
+            InlineKeyboardButton(text="Транспорт", callback_data="category_transport")
+        ],
+        [
+            InlineKeyboardButton(text="Дороги", callback_data="category_roads"),
+            InlineKeyboardButton(text="Роспотребнадзор", callback_data="category_rpn")
+        ]
+    ])
+    return keyboard
 
 
 def get_start_keyboard():
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text="Начать")]],
-        resize_keyboard=True
-    )
+    # Клавиатура с одной кнопкой "Начать"
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Начать", callback_data="start")]
+    ])
     return keyboard
